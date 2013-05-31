@@ -1,5 +1,7 @@
 require 'csv'
+require 'active_record'
 require_relative '../app/models/pol.rb'
+
 
 class SunlightLegislatorsImporter
   def self.import(filename)
@@ -11,7 +13,10 @@ class SunlightLegislatorsImporter
         keys << field
         values << value
       end
-      pol = Pol.create!(Hash[keys.zip(values)])
+      hash = Hash[keys.zip(values)]
+      @pol = Pol.new
+      @pol.attributes = hash.reject{|k,v| !@pol.attributes.keys.member?(k.to_s) }
+      @pol.save
     end
   end
 end
@@ -26,6 +31,6 @@ rescue NotImplementedError => e
 end
 
 
-# SunlightLegislatorsImporter.import('../db/data/legislators.csv')
+SunlightLegislatorsImporter.import('../db/data/legislators.csv')
 
 
