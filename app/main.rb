@@ -39,7 +39,6 @@ def active_pols_by_state
 
   states = []
   Pol.all.each do |pol|
-    # binding.pry
     if states.include?(pol.state)
       next
     elsif (pol.title == 'Sen')# && (pol.in_office == 1)
@@ -48,7 +47,6 @@ def active_pols_by_state
   end
   
   states.each do |state|
-    # binding.pry
     puts "#{state}: " + 
     Pol.where("state = ? AND title = 'Sen' AND in_office = 1", state).count.to_s + 
     " Senators, " +
@@ -74,6 +72,9 @@ puts
 active_pols_by_state    # DOES NOT SORT BY NUMBER OF REPS
 puts
 count_pols
+
+
+# p Pol.female.count / Pol.count.to_f  
 
 
 
