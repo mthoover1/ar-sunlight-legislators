@@ -1,6 +1,6 @@
 require 'csv'
 require 'active_record'
-require_relative '../app/models/pol.rb'
+require_relative '../app/models/politician.rb'
 
 
 class SunlightLegislatorsImporter
@@ -14,7 +14,7 @@ class SunlightLegislatorsImporter
         values << value
       end
       hash = Hash[keys.zip(values)]
-      @pol = Pol.new
+      @pol = Politician.new
       @pol.attributes = hash.reject{|k,v| !@pol.attributes.keys.member?(k.to_s) }
       @pol.save
     end
