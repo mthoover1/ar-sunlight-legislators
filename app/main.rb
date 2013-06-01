@@ -1,6 +1,16 @@
 require_relative 'models/politician.rb'
+require 'twitter'
+require 'json'
 
 require 'pry'
+
+Twitter.configure do |config|
+  config.consumer_key = 'icSuwtzaGBzwt6G9fhB8g'
+  config.consumer_secret = 'TjQgQDV9I6BMMHZn1eplw9monbraIT9Ak5pXQJBiE'
+  config.oauth_token = '55737202-rnduIEuLo0jdOZWQWK3oPFb82FO6wa0hgITjA9mAY'
+  config.oauth_token_secret = 'uN1cJOK2oDSyKBwJCPa12mqxfyze5yB90zWVIIvdIU'
+end
+
 
 def display_state_politicians(state)
   puts 'Senators:'
@@ -63,6 +73,14 @@ def count_politicians
   puts "Representatives: " + Politician.where("title = 'Rep'").count.to_s
 end
 
+def store_tweets_for_id(id)
+  politician = Politician.find(id)
+  tweets = Twitter.user_timeline("ToddAkin")
+  politician.tweets = []
+  tweets[0..9].each do |tweet|
+    politician.tweets << tweet
+  end
+end
 
 
 # Politician.where(:in_office => 0).destroy_all   # DELETED ALL INACTIVE CONGRESS MEMBERS
@@ -70,9 +88,9 @@ end
 
 # display_state_politicians("IL")
 # puts
-politicians_by_gender("male")
-puts
-puts Politician.count
+# politicians_by_gender("male")
+# puts
+# puts Politician.count
 # puts
 # active_politicians_by_state    # DOES NOT SORT BY NUMBER OF REPS
 # puts
@@ -83,3 +101,9 @@ puts Politician.count
 
 
 
+# store_tweets_for_id(8)
+# tweets = Twitter.user_timeline("ToddAkin")
+# tweets[0..1].each do |tweet|
+#   p tweet
+# end
+puts Politician.find(8).tweets

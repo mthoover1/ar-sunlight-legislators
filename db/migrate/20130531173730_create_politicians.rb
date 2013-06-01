@@ -3,7 +3,7 @@ require_relative '../config'
 
 class CreatePoliticians < ActiveRecord::Migration
   def change
-    create_table :pols do |t|
+    create_table :politicians do |t|
       t.string :title
       t.string :firstname
       t.string :middlename
