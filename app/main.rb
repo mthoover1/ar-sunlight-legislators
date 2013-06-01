@@ -1,8 +1,11 @@
 require_relative 'models/politician.rb'
+# require_relative '../db/config'
+require_relative 'models/senator.rb'
+require_relative 'models/representative.rb'
+require_relative 'models/tweet.rb'
 require 'twitter'
 require 'json'
 
-require 'pry'
 
 Twitter.configure do |config|
   config.consumer_key = 'icSuwtzaGBzwt6G9fhB8g'
@@ -75,13 +78,25 @@ end
 
 def store_tweets_for_id(id)
   politician = Politician.find(id)
-  tweets = Twitter.user_timeline("ToddAkin")
-  politician.tweets = []
+  Tweet.where("politician_id = ?", id).destroy_all
+  tweets = Twitter.user_timeline(Politician.find(id).twitter_id)
+  # politician.tweets = []
   tweets[0..9].each do |tweet|
-    politician.tweets << tweet
+    politician.tweets << Tweet.create({ text: tweet.text,
+                           created_at: tweet.created_at, twitter_post_id: tweet.id,
+                           politician_id: id })
   end
 end
 
+def display_tweets_for_id(id)
+  puts
+  politician = Politician.find(id)
+  puts "#{politician.title}. #{politician.firstname} #{politician.lastname}  " +
+       "#{politician.party}-#{politician.state}"
+  politician.tweets.each do |tweet|
+    puts "#{tweet.created_at.to_s[0..-10]}:  #{tweet.text}"
+  end
+end
 
 # Politician.where(:in_office => 0).destroy_all   # DELETED ALL INACTIVE CONGRESS MEMBERS
 
@@ -101,9 +116,8 @@ end
 
 
 
-# store_tweets_for_id(8)
-# tweets = Twitter.user_timeline("ToddAkin")
-# tweets[0..1].each do |tweet|
-#   p tweet
-# end
-puts Politician.find(8).tweets
+# store_tweets_for_id(184)
+# store_tweets_for_id(371)
+# store_tweets_for_id(184)
+display_tweets_for_id(184)
+display_tweets_for_id(371)

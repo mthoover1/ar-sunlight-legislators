@@ -4,7 +4,6 @@ require_relative '../app/models/politician.rb'
 require_relative '../app/models/senator.rb'
 require_relative '../app/models/representative.rb'
 
-
 class SunlightLegislatorsImporter
   def self.import(filename)
     csv = CSV.new(File.open(filename), :headers => true)
@@ -18,7 +17,6 @@ class SunlightLegislatorsImporter
       end
 
       hash = Hash[keys.zip(values)]    # hash keys
-
       if values.include?('Sen')
         @pol = Senator.new
       elsif values.include?('Rep')

@@ -19,7 +19,8 @@ class CreatePoliticians < ActiveRecord::Migration
       t.string :webform
       t.string :twitter_id
       t.date   :birthdate
-      t.string :type
+
+      t.string :congress_type
     end
   end
 end
